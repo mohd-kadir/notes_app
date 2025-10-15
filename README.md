@@ -1,16 +1,56 @@
-# db_practise
+# 🗒️ Notes App
 
-A new Flutter project.
+A simple and elegant **Flutter Notes App** that allows users to **create, read, update, and delete (CRUD)** notes locally on their device.  
+It’s built to demonstrate Flutter’s state management, local storage integration, and clean UI design.
 
-## Getting Started
+## 🚀 Features
 
-This project is a starting point for a Flutter application.
+- ✏️ Add new notes  
+- 📋 View all saved notes  
+- 🗑️ Delete or edit existing notes  
+- 💾 Local database storage (using `sqflite`)  
+- 🎨 Clean, responsive UI  
+- ⚡ Fast performance and smooth animations  
 
-A few resources to get you started if this is your first Flutter project:
+## 🧱 Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Component       Description 
+ **Framework**  Flutter 
+ **Language**   Dart 
+ **Database**   Sqflite
+ **IDE**        Android Studio
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📲 Screenshots
+(Add screenshots of your app UI here)
+
+## 🧰 Installation
+
+Follow these steps to run the project locally 👇
+
+# Clone the repository
+git clone https://github.com/mohd-kadir/notes_app.git
+
+# Navigate to the project directory
+cd notes_app
+
+# Get Flutter dependencies
+flutter pub get
+
+# Run the app
+flutter run
+
+# 🧠 Learning Goals
+	•	Understanding state management in Flutter
+	•	Implementing local storage (Sqflite / Hive)
+	•	Practicing CRUD operations
+	•	UI/UX design using Flutter widgets
+
+# 🧑‍💻 Author
+
+Mohd Kadir
+💼 GitHub : https://github.com/mohd-kadir/notes_app
+📧 email : mohdkadir2512004@gmail.com
+
+# 🪪 License
+
+This project is licensed under the MIT License — see the LICENSE file for details.
