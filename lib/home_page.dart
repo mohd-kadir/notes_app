@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
               itemCount: allNotes.length,
               itemBuilder: (_, index) {
                 return ListTile(
-                  leading: Text("${allNotes[index][DBHelper.COLUMN_NOTE_SNO]}"),
+                  leading: Text("${index+1}"),
                   title: Text(allNotes[index][DBHelper.COLUMN_NOTE_TITLE]),
                   subtitle: Text(allNotes[index][DBHelper.COLUMN_NOTE_DESCRI]),
                   trailing: SizedBox(
@@ -50,9 +50,34 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         InkWell(
-
-                            child: Icon(Icons.edit)),
-                        InkWell(child: Icon(Icons.delete,color: Colors.red))
+                          onTap: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) {
+                                titleController.text =
+                                    allNotes[index][DBHelper.COLUMN_NOTE_TITLE];
+                                descriController.text =
+                                    allNotes[index][DBHelper
+                                        .COLUMN_NOTE_DESCRI];
+                                return getBottomSheetWidget(
+                                  isUpdate: true,
+                                  sno:
+                                      allNotes[index][DBHelper.COLUMN_NOTE_SNO],
+                                );
+                              },
+                            );
+                          },
+                          child: Icon(Icons.edit),
+                        ),
+                        InkWell(
+                            onTap: () async{
+                              bool check = await dbRef!.deleteNote(sno: allNotes[index][DBHelper.COLUMN_NOTE_SNO]);
+                              if(check){
+                                getNotes();
+                              }
+                            },
+                            child: Icon(Icons.delete, color: Colors.red)),
                       ],
                     ),
                   ),
@@ -63,10 +88,14 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           String errorMsg = '';
+
           ///Note to be added here
           showModalBottomSheet(
+            isScrollControlled: true,
             context: context,
             builder: (context) {
+              titleController.clear();
+              descriController.clear();
               return getBottomSheetWidget();
             },
           );
@@ -75,18 +104,19 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  Widget getBottomSheetWidget(){
+
+  Widget getBottomSheetWidget({bool isUpdate = false, int sno = 0}) {
     return Container(
-      padding: EdgeInsets.all(11),
+      height: MediaQuery.of(context).size.height * 0.5 + MediaQuery.of(context).viewInsets.bottom,
+      padding: EdgeInsets.only(top: 11,right: 11,left: 11,bottom: 11 + MediaQuery.of(context).viewInsets.bottom ),
       width: double.infinity,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Add Note",
-            style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-            ),
+            isUpdate ? 'Update Note' : "Add Note",
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 21),
           TextField(
@@ -96,9 +126,7 @@ class _HomePageState extends State<HomePage> {
               label: Text("Title *"),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(
-                  color: Colors.deepPurpleAccent,
-                ),
+                borderSide: BorderSide(color: Colors.deepPurpleAccent),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -114,9 +142,7 @@ class _HomePageState extends State<HomePage> {
               label: Text('Description *'),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
-                borderSide: BorderSide(
-                  color: Colors.deepPurpleAccent,
-                ),
+                borderSide: BorderSide(color: Colors.deepPurpleAccent),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -129,24 +155,34 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                          width: 1
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(11),
-                      )
+                    side: BorderSide(width: 1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(11),
+                    ),
                   ),
-                  onPressed: () async{
+                  onPressed: () async {
                     var Title = titleController.text;
                     var Descri = descriController.text;
 
-                    if(Title.isNotEmpty && Descri.isNotEmpty){
-                      bool check = await dbRef!.addNote(mTitle: Title, mDesc: Descri);
-                      if(check){
+                    if (Title.isNotEmpty && Descri.isNotEmpty) {
+                      bool check = isUpdate
+                          ? await dbRef!.updateNote(
+                              mTitle: Title,
+                              mDescri: Descri,
+                              sno: sno,
+                            )
+                          : await dbRef!.addNote(mTitle: Title, mDesc: Descri);
+                      if (check) {
                         getNotes();
                       }
-                    }else{
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("*Please fill all the requirements blanks!!")));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "*Please fill all the requirements blanks!!",
+                          ),
+                        ),
+                      );
                     }
 
                     titleController.clear();
@@ -154,19 +190,17 @@ class _HomePageState extends State<HomePage> {
 
                     Navigator.pop(context);
                   },
-                  child: Text("Add Note"),
+                  child: Text(isUpdate ? 'Update Note' : "Add Note"),
                 ),
               ),
               SizedBox(width: 11),
               Expanded(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                          width: 1
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(11),
-                      )
+                    side: BorderSide(width: 1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(11),
+                    ),
                   ),
                   onPressed: () {
                     Navigator.pop(context);
@@ -176,6 +210,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
+          SizedBox(
+            height: 25,
+          )
         ],
       ),
     );
