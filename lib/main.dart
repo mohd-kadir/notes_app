@@ -1,9 +1,12 @@
+import 'package:db_practise/DBProvider.dart';
 import 'package:db_practise/data/local/db_helper.dart';
 import 'package:db_practise/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(create: (context) => DBProvider(dbHelper: DBHelper.getInstance),
+  child: MyApp(),));
 }
 
 class MyApp extends StatelessWidget {
