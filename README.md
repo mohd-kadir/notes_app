@@ -21,7 +21,8 @@ Component       Description
  **IDE**        Android Studio
 
 ## 📲 Screenshots
-(Add screenshots of your app UI here)
+<img width="200" height="500" alt="image" src="https://github.com/user-attachments/assets/93883495-7ac6-48ac-a493-393869c63caa" />
+
 
 ## 🧰 Installation
 
