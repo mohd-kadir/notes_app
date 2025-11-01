@@ -28,7 +28,8 @@ Component       Description
 
 Follow these steps to run the project locally 👇
 
-# Clone the repository
+Clone the repository
+```bash
 git clone https://github.com/mohd-kadir/notes_app.git
 
 # Navigate to the project directory
